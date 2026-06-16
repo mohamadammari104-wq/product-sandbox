@@ -1,6 +1,15 @@
 import './styles.css';
 import { participants } from './participants.js';
 
+function getStatusBadge(status) {
+  const colors = {
+    'On Track': 'badge-ontrack',
+    'Needs Follow-Up': 'badge-followup',
+    'At Risk': 'badge-atrisk'
+  };
+  return `<span class="badge ${colors[status] || 'badge-default'}">${status}</span>`;
+}
+
 const root = document.getElementById('root');
 
 root.innerHTML = '<div class="page">' +
