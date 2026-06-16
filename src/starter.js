@@ -78,6 +78,66 @@ function getSelectedParticipant() {
   if (!selectedParticipantId) return null;
   return participants.find(p => p.id === selectedParticipantId) || null;
 }
+function renderApp() {
+  const filtered = getFilteredParticipants();
+  const selected = getSelectedParticipant();
+  const teams = getUniqueTeams();
+  
+  let statusOptions = ['all', 'On Track', 'Needs Follow-Up', 'At Risk'];
+  let statusHtml = statusOptions.map(status => 
+    `<option value="${status}" ${currentStatusFilter === status ? 'selected' : ''}>${status === 'all' ? 'All Statuses' : status}</option>`
+  ).join('');
+  
+  let teamHtml = `<option value="all">All Teams</option>` +
+    teams.map(team => 
+      `<option value="${team}">${team}</option>`
+    ).join('');
+  
+  const appHtml = `
+    <div class="app">
+      <header class="app-header">
+        <h1>Participant Dashboard</h1>
+        <div class="stats">
+          <span>Total: ${participants.length}</span>
+          <span>Showing: ${filtered.length}</span>
+        </div>
+      </header>
+      
+      <div class="filter-controls">
+        <input 
+          type="text" 
+          id="searchInput" 
+          placeholder="Search by name..." 
+          value="${currentSearch}"
+          oninput="handleSearch(this.value)"
+        />
+        <select id="statusFilter" onchange="handleStatusFilter(this.value)">
+          ${statusHtml}
+        </select>
+        <select id="teamFilter">
+          ${teamHtml}
+        </select>
+      </div>
+      
+      <div class="main-content">
+        <div class="participant-list">
+          ${renderParticipants(filtered)}
+        </div>
+        ${renderDetails(selected)}
+      </div>
+    </div>
+  `;
+  
+  document.getElementById('root').innerHTML = appHtml;
+  
+  document.querySelectorAll('.participant-item').forEach(el => {
+    el.addEventListener('click', function() {
+      const id = parseInt(this.dataset.id);
+      selectedParticipantId = id;
+      renderApp();
+    });
+  });
+}
 const root = document.getElementById('root');
 
 root.innerHTML = '<div class="page">' +
