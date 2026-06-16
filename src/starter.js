@@ -49,7 +49,35 @@ function renderDetails(participant) {
     </div>
   `;
 }
+function getUniqueTeams() {
+  const teams = participants.map(p => p.team);
+  return [...new Set(teams)];
+}
 
+let currentSearch = '';
+let currentStatusFilter = 'all';
+let selectedParticipantId = null;
+
+function getFilteredParticipants() {
+  let result = [...participants];
+  
+  if (currentSearch) {
+    result = result.filter(p => 
+      p.name.toLowerCase().includes(currentSearch.toLowerCase())
+    );
+  }
+  
+  if (currentStatusFilter !== 'all') {
+    result = result.filter(p => p.status === currentStatusFilter);
+  }
+  
+  return result;
+}
+
+function getSelectedParticipant() {
+  if (!selectedParticipantId) return null;
+  return participants.find(p => p.id === selectedParticipantId) || null;
+}
 const root = document.getElementById('root');
 
 root.innerHTML = '<div class="page">' +
