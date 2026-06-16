@@ -138,6 +138,24 @@ function renderApp() {
     });
   });
 }
+
+window.handleSearch = function(value) {
+  currentSearch = value;
+  renderApp();
+};
+
+window.handleStatusFilter = function(value) {
+  currentStatusFilter = value;
+  renderApp();
+};
+
+window.closeDetails = function() {
+  selectedParticipantId = null;
+  renderApp();
+};
+
+renderApp();
+
 const root = document.getElementById('root');
 
 root.innerHTML = '<div class="page">' +
