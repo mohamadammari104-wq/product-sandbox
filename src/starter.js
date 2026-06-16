@@ -9,6 +9,46 @@ function getStatusBadge(status) {
   };
   return `<span class="badge ${colors[status] || 'badge-default'}">${status}</span>`;
 }
+function renderParticipants(participantsList) {
+  return participantsList.map(participant => {
+    return `
+      <div class="participant-item" data-id="${participant.id}">
+        <div class="participant-info">
+          <h3>${participant.name}</h3>
+          <span class="participant-email">${participant.role} • ${participant.team}</span>
+        </div>
+        <div class="participant-meta">
+          <span class="participant-team">${participant.team}</span>
+          ${getStatusBadge(participant.status)}
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+function renderDetails(participant) {
+  if (!participant) {
+    return `
+      <div class="detail-panel">
+        <h2>Participant Details</h2>
+        <p>Select a participant to see details here.</p>
+      </div>
+    `;
+  }
+  
+  return `
+    <div class="detail-panel">
+      <button class="close-button" onclick="closeDetails()">×</button>
+      <h2>${participant.name}</h2>
+      <p><strong>Role:</strong> ${participant.role}</p>
+      <p><strong>Team:</strong> ${participant.team}</p>
+      <p><strong>Status:</strong> ${getStatusBadge(participant.status)}</p>
+      <p><strong>Weekly Report:</strong> ${participant.weeklyReport}</p>
+      <p><strong>Deliverable:</strong> ${participant.deliverable}</p>
+      <p><strong>Housing:</strong> ${participant.housing}</p>
+    </div>
+  `;
+}
 
 const root = document.getElementById('root');
 
